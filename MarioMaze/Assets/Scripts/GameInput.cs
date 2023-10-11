@@ -7,10 +7,7 @@ public class GameInput : MonoBehaviour
     public static GameInput Instance { get; private set; }
     
     // list of events
-    public event Action<bool> OnCameraTurn; // 1 for right. 0 for left.
-    public event Action OnPlayerMenuToggle;
-    public event Action OnPauseAction;
-
+    public event Action<bool> OnCameraTurn; // 1 for right. 0 for left
     private GameInputActions gameInputActions;
 
     private void Awake()

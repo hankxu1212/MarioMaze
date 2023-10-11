@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,10 @@ public class Player : MonoBehaviour
     private PlayerState state;
     private CharacterController controller;
     private Vector3 moveDir;
+
+    public event Action OnCoinCollected;
+
+    private int coins = 0;
     
     private void Awake()
     {
@@ -35,6 +40,21 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleMovement();
+    }
+    
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Coin"))
+        {
+            coins++;
+            Destroy(hit.gameObject);
+            OnCoinCollected?.Invoke();
+        }
+
+        if (hit.gameObject.CompareTag("Finish"))
+        {
+            Debug.Log("Finished! Congratulations");
+        }
     }
 
     // move towards `moveDir` with speed
