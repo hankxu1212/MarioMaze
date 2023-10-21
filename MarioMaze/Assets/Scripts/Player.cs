@@ -1,14 +1,10 @@
 using System;
 using Cinemachine;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-
-public enum PlayerState
-{
-    Idle, 
-    Walk
-}
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -20,19 +16,18 @@ public class Player : MonoBehaviour
     
     [Header("Player Controller")]
     [SerializeField] private float moveSpeed = 12f;
-    private PlayerState state;
     private CharacterController controller;
     private Vector3 moveDir;
 
     public event Action OnCoinCollected;
-
-    private int coins = 0;
+    public event Action OnFinish;
     
+    public Coroutine shift = null;
+
+
     private void Awake()
     {
-        state = PlayerState.Idle;
         Instance = this;
-        
         controller = GetComponent<CharacterController>();
     }
     
@@ -46,19 +41,23 @@ public class Player : MonoBehaviour
     {
         if (hit.gameObject.CompareTag("Coin"))
         {
-            coins++;
             Destroy(hit.gameObject);
             OnCoinCollected?.Invoke();
         }
-
-        if (hit.gameObject.CompareTag("Finish"))
+        else if (hit.gameObject.CompareTag("Finish"))
         {
-            Debug.Log("Finished! Congratulations");
+            OnFinish?.Invoke();
+        }
+        else if (hit.gameObject.CompareTag("Portal"))
+        {
+            var portal = hit.gameObject.GetComponent<Portal>();
+            CameraManager.Instance.SetY(portal.GetY());
+            transform.position = portal.GetPlayerCoords();
         }
     }
 
     // move towards `moveDir` with speed
-    public void Move(float speed)
+    private void Move(float speed)
     {
         Vector3 moveDist = speed * Time.deltaTime * moveDir;
         controller.Move(moveDist);
@@ -72,10 +71,7 @@ public class Player : MonoBehaviour
     {
         Vector3 inputVector = GameInput.Instance.GetMovementVectorNormalized();
         if (inputVector == Vector3.zero)
-        {
-            state = PlayerState.Idle;
             return;
-        }
         
         // calculates orthographic camera angle
         Vector3 forward = virtualCamera.transform.forward;
@@ -86,10 +82,6 @@ public class Player : MonoBehaviour
         moveDir = (forward + right).normalized;
         
         // move
-        state = PlayerState.Walk;
         Move(moveSpeed);
     }
-    
-    public bool IsWalking() => state == PlayerState.Walk;
-    public bool IsIdle() => state == PlayerState.Idle;
 }

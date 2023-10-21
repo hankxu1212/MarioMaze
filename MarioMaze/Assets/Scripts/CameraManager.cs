@@ -1,8 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using Cinemachine;
 
-public class CameraMovements : MonoBehaviour
+public class CameraManager : MonoBehaviour
 {
+    public static CameraManager Instance { get; private set; }
+    
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
     // here orthographic camera is used so FOV is actually m_Lens.OrthographicSize
@@ -21,10 +24,20 @@ public class CameraMovements : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         virtualCamera.m_Lens.OrthographicSize = FOVDefault;
         targetFOV = virtualCamera.m_Lens.OrthographicSize;
         targetCameraRotation = transform.rotation;
         isMoving = false;
+    }
+
+    public void SetY(float y)
+    {
+        virtualCamera.transform.position = new Vector3(
+            virtualCamera.transform.position.x,
+            y,
+            virtualCamera.transform.position.z
+        );
     }
 
     private void Start()
@@ -68,5 +81,36 @@ public class CameraMovements : MonoBehaviour
 
         targetFOV = Mathf.Clamp(targetFOV, FOVmin, FOVmax);
         virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, targetFOV, Time.deltaTime * 10);
+    }
+
+    public IEnumerator CameraShiftCoroutine(float y)
+    {
+        float time = 0;
+        while (time < 1)
+        {
+            var yval = Mathf.Lerp(
+                virtualCamera.transform.position.y,
+                y,
+                time
+            );
+
+            virtualCamera.transform.position = new Vector3(
+                virtualCamera.transform.position.x,
+                yval,
+                virtualCamera.transform.position.z
+            );
+
+            time += Time.deltaTime;
+
+            yield return null;
+        }
+        
+        virtualCamera.transform.position = new Vector3(
+            virtualCamera.transform.position.x,
+            y,
+            virtualCamera.transform.position.z
+        );
+
+        Player.Instance.shift = null;
     }
 }
