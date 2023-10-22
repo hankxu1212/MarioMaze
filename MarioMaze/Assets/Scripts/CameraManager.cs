@@ -83,6 +83,32 @@ public class CameraManager : MonoBehaviour
         virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, targetFOV, Time.deltaTime * 10);
     }
 
+    public void ShiftUp()
+    {
+        var cur_y = virtualCamera.transform.position.y;
+
+        var new_y = Mathf.Clamp(cur_y + 250, 0, 500);
+        
+        if (new_y != cur_y)
+        {
+            StopAllCoroutines();
+            StartCoroutine(CameraShiftCoroutine(new_y));
+        }
+    }
+    
+    public void ShiftDown()
+    {
+        var cur_y = virtualCamera.transform.position.y;
+
+        var new_y = Mathf.Clamp(cur_y - 250, 0, 500);
+
+        if (new_y != cur_y)
+        {
+            StopAllCoroutines();
+            StartCoroutine(CameraShiftCoroutine(new_y));
+        }
+    }
+
     public IEnumerator CameraShiftCoroutine(float y)
     {
         float time = 0;

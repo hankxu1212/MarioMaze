@@ -19,7 +19,7 @@ public class UI : MonoBehaviour
     private void Update()
     {
         totalTime -= Time.deltaTime;
-        timeLeft.text = "Time Left: " + totalTime;
+        timeLeft.text = $"Time Left: {totalTime:0.00}";
         if (totalTime < 10)
             timeLeft.color = Color.red;
 

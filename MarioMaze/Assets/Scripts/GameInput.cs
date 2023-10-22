@@ -31,12 +31,26 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.Enable();
         gameInputActions.Player.CameraRight.performed += CameraRight_performed;
         gameInputActions.Player.CameraLeft.performed += CameraLeft_performed;
+        gameInputActions.Player.MoveDown.performed += MoveDownOnperformed;
+        gameInputActions.Player.MoveUp.performed += MoveUpOnperformed;
     }
-    
+
+    private void MoveUpOnperformed(InputAction.CallbackContext obj)
+    {
+        CameraManager.Instance.ShiftUp();
+    }
+
+    private void MoveDownOnperformed(InputAction.CallbackContext obj)
+    {
+        CameraManager.Instance.ShiftDown();
+    }
+
     private void OnDisable()
     {
         gameInputActions.Player.CameraRight.performed -= CameraRight_performed;
         gameInputActions.Player.CameraLeft.performed -= CameraLeft_performed;
+        gameInputActions.Player.MoveDown.performed -= MoveDownOnperformed;
+        gameInputActions.Player.MoveUp.performed -= MoveUpOnperformed;
         gameInputActions.Dispose();
     }
     
