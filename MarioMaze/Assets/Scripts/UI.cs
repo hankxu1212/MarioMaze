@@ -7,7 +7,7 @@ public class UI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private TextMeshProUGUI timeLeft;
     [SerializeField] private float totalTime = 60;
-    private int coinsCount = 0;
+    private int coinsCount;
     
     private void Start()
     {
@@ -39,6 +39,9 @@ public class UI : MonoBehaviour
     private void InstanceOnOnCoinCollected()
     {
         coinsCount++;
+        Player.Instance.moveSpeed += 10;
+        if (Player.Instance.moveSpeed > 100)
+            Player.Instance.moveSpeed = 100;
         text.text = "Coins Collected: " + coinsCount;
     }
 }

@@ -1,10 +1,6 @@
 using System;
 using Cinemachine;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -15,7 +11,7 @@ public class Player : MonoBehaviour
     private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(0, 90, 0));
     
     [Header("Player Controller")]
-    [SerializeField] private float moveSpeed = 12f;
+    [SerializeField] public float moveSpeed = 12f;
     private CharacterController controller;
     private Vector3 moveDir;
 
