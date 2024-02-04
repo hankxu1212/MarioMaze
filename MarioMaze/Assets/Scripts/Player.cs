@@ -15,41 +15,15 @@ public class Player : MonoBehaviour
     private CharacterController controller;
     private Vector3 moveDir;
 
-    public event Action OnCoinCollected;
-    public event Action OnFinish;
-    
-    public Coroutine shift = null;
-
-
     private void Awake()
     {
         Instance = this;
         controller = GetComponent<CharacterController>();
     }
     
-    
     private void Update()
     {
         HandleMovement();
-    }
-    
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.CompareTag("Coin"))
-        {
-            Destroy(hit.gameObject);
-            OnCoinCollected?.Invoke();
-        }
-        else if (hit.gameObject.CompareTag("Finish"))
-        {
-            OnFinish?.Invoke();
-        }
-        else if (hit.gameObject.CompareTag("Portal"))
-        {
-            var portal = hit.gameObject.GetComponent<Portal>();
-            CameraManager.Instance.SetY(portal.GetY());
-            transform.position = portal.GetPlayerCoords();
-        }
     }
 
     // move towards `moveDir` with speed

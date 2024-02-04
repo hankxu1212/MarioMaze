@@ -1,0 +1,22 @@
+﻿- Unity Interface (game view vs scene view, inspector, project view), setting up your project: 10
+- Scene view (how to navigate in scene view), hierarchy (transforms): 2
+- Objects and Components: 5-10 (colliders, mesh renderer, filter)
+    - Prefabs: 5
+- Post processing: 5
+- Shading: 5
+    - Shaders (lit, unlit)
+    - Materials (texturing)
+- Scripting: Scripting: 30
+    - Input: 10
+    - Unity object lifecycle: 5
+        - https://i.pinimg.com/originals/28/c0/a8/28c0a82ee24e0979f2d2c60b20e18f50.png
+    - Camera: 3
+        - Orthographic vs perspective
+            - https://grid-paint.com/images/png/5353898643554304.png
+    - Player: 5
+        - Player Controller
+    - Serialization: 3
+    - Colliders (if has time)
+
+- Finishing up the level: 10
+- Building the game: 5
